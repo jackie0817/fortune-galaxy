@@ -1,0 +1,168 @@
+/* 星际银河风格样式（覆盖原样式） */
+:root{
+  --bg1:#071028;
+  --bg2:#000009;
+  --accent:#8b7bff;
+  --accent-2:#5be6ff;
+  --glass: rgba(255,255,255,0.05);
+  --glass-2: rgba(255,255,255,0.06);
+}
+
+/* 全局背景星空层 */
+body{
+  margin:0;
+  font-family: "Noto Sans SC", "Helvetica Neue", Arial, sans-serif;
+  background: radial-gradient(circle at 10% 10%, #0b1530 0%, var(--bg1) 30%, var(--bg2) 100%);
+  color:#f0f6ff;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:32px;
+  overflow:hidden;
+}
+
+/* 星点图层（使用伪元素效果） */
+.sky{
+  position:fixed;
+  inset:0;
+  background-image: url("https://cdn.jsdelivr.net/gh/VincentGarreau/particles.js/demo/img/stars.png");
+  background-size:cover;
+  opacity:0.35;
+  filter:blur(0.6px) contrast(1.1);
+  animation:twinkle 9s infinite alternate ease-in-out;
+  z-index:0;
+}
+
+@keyframes twinkle{
+  from{ transform:scale(1); opacity:0.3;}
+  to{ transform:scale(1.03); opacity:0.6;}
+}
+
+/* 主容器（玻璃质感） */
+.container{
+  position:relative;
+  z-index:1;
+  width:100%;
+  max-width:480px;
+  padding:28px;
+  border-radius:18px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+  box-shadow: 0 8px 30px rgba(10,6,20,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.04);
+  text-align:center;
+}
+
+/* 标题 */
+.title{
+  margin:0 0 18px 0;
+  font-size:1.4rem;
+  letter-spacing:0.6px;
+  text-shadow: 0 0 12px rgba(139,123,255,0.25);
+}
+
+/* ---------- 調整後的卡牌區 & 卡片設定（粘貼替換原本相關區塊） ---------- */
+
+/* 卡牌區：不要用 100vh，改用自適高度並置中 */
+.card-area{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  /* 讓 card-area 根據內容高度自動收縮，避免把頁面推走 */
+  height: auto;
+  padding: 18px 0;
+  perspective: 1200px;
+  margin-bottom: 14px;
+}
+
+/* 卡片容器：以視窗寬度比例為主，並限制最大寬度 */
+.card{
+  position: relative;
+  width: 40vw;          /* 在桌面上佔視窗寬度 40% */
+  max-width: 380px;     /* 最大寬度，不會太誇張 */
+  min-width: 160px;     /* 手機極小螢幕也有底限 */
+  aspect-ratio: 2 / 3;  /* 維持 2:3 比例 */
+  transform-style: preserve-3d;
+  transition: transform 0.9s cubic-bezier(.2,.9,.2,1), box-shadow 0.3s;
+  cursor: default;
+}
+
+/* 保證 .container 內的內容照順序顯示（避免垂直置中時出現遮蔽） */
+.container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+/* 正反面共同設定（保持原本樣式） */
+.card .face{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 12px;
+  overflow: hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* 卡背圖片 */
+.face.back img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display:block;
+}
+
+/* 卡面圖片 */
+.face.front{
+  transform: rotateY(180deg);
+  background: linear-gradient(180deg, rgba(0,0,0,0.12), rgba(8,6,12,0.12));
+}
+
+.face.front img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display:block;
+  filter: drop-shadow(0 6px 16px rgba(80,60,160,0.4));
+}
+
+/* 翻面樣式（在 JS 裡添加 .flipped） */
+.card.flipped{
+  transform: rotateY(180deg);
+  box-shadow: 0 18px 50px rgba(40,20,120,0.45);
+}
+
+/* 圖片總體樣式調整（覆蓋重複定義） */
+.card img{
+  border-radius: 12px;
+  display:block;
+}
+
+/* 控制按鍵（確保按鍵與文字可見） */
+.controls{
+  display:flex;
+  gap:12px;
+  justify-content:center;
+  margin-top:12px; /* 微調 */
+  margin-bottom:14px;
+  z-index: 2; /* 前景 */
+}
+
+/* 確保文字資訊區可見並不被卡片覆蓋 */
+.info{
+  margin-top:10px;
+  padding:8px 6px 0 6px;
+  text-align:center;
+  width:100%;
+  z-index:2;
+}
+
+/* 小調整：讓 body 可以滾動，避免被裁切（若你希望固定高度可改回 hidden） */
+body{
+  overflow:auto;
+}
+
